@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"outDir": "./dist",
+		// 出力されるjsのversion。現状のブラウザに対応しているものであればよい。
+		"target": "ES5",
+		// exportの形式 commonjsだとnode使用、amdだとブラウザ使用などの方式がある
+		// https://qiita.com/nanocloudx/items/70f1316debf05b93ac82
+		// es2015はexportを使った規格で、対応していないブラウザも存在する
+		// https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Statements/export#browser_compatibility 
+		"module": "es2015"
+	},
+	"include": [
+		"src/**/*"
+	]
+}
