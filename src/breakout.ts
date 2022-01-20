@@ -1,9 +1,4 @@
-class Breakout {
-	private readonly canvas: HTMLCanvasElement;
-	private readonly ctx: CanvasRenderingContext2D; 
+import { Ball } from "./Object";
 
-}
-
-class ball {
-	
-}
+let ball = new Ball(10, 20, 3, -3);
+console.log(ball.dx);
