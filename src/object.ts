@@ -37,4 +37,3 @@ class Brick {
 		private readonly offsetLeft: number,
 	) {}
 }
-
