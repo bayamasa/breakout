@@ -31,17 +31,34 @@ var Breakout = /** @class */ (function () {
         this.ctx.fill();
         this.ctx.closePath();
     };
+    Breakout.prototype.drawBall = function (b) {
+        this.ctx.beginPath();
+        this.ctx.arc(b.getX(), b.getY(), b.getRadius(), 0, Math.PI * 2);
+        this.ctx.fillStyle = Breakout.style;
+        this.ctx.fill();
+        this.ctx.closePath();
+    };
     Breakout.font = "16px Arial";
     Breakout.style = "#0095DD";
     return Breakout;
 }());
 var Ball = /** @class */ (function () {
-    function Ball(x, y, dx, dy) {
+    function Ball(x, y, radius, dx, dy) {
         this.x = x;
         this.y = y;
+        this.radius = radius;
         this.dx = dx;
         this.dy = dy;
     }
+    Ball.prototype.getX = function () {
+        return this.x;
+    };
+    Ball.prototype.getY = function () {
+        return this.y;
+    };
+    Ball.prototype.getRadius = function () {
+        return this.radius;
+    };
     return Ball;
 }());
 var Paddle = /** @class */ (function () {
@@ -76,9 +93,10 @@ var Brick = /** @class */ (function () {
     return Brick;
 }());
 var breakout = new Breakout(0, 3);
-var ball = new Ball(10, 20, 3, -3);
+var ball = new Ball(10, 20, 10, 3, -3);
 var paddle = new Paddle(10, 75, (breakout.getCanvasWidth() - 75) / 2, false, false);
 var brick = new Brick(3, 5, 75, 20, 10, 30, 30);
 breakout.drawLives();
 breakout.drawScore();
 breakout.drawPaddle(paddle);
+breakout.drawBall(ball);
