@@ -57,7 +57,24 @@ class Breakout {
 		this.ctx.fill();
 		this.ctx.closePath();
 	}
-	
+	public drawBricks(b: Brick) {
+		for(let c = 0; c < b.getColumnCount(); c++) {
+			for(var r = 0; r < b.getRowCount(); r++) {
+				if (b.bricks[c][r].status == 1)
+				{
+					b.getBrickX() = (c * (b.getWidth() + b.getPadding())) + b.getOffsetLeft();
+					this.brickY = (r * (this.getHeight() + this.getPadding())) + this.getOffsetTop();
+					this.bricks[c][r].x = this.getBrickX();
+					this.bricks[c][r].y = this.getBrickY();
+					ctx.beginPath();
+					ctx.rect(brickX, brickY, brickWidth, brickHeight);
+					ctx.fillStyle = "#0095DD";
+					ctx.fill();
+					ctx.closePath();
+				}
+			}
+		}
+	}
 }
 
 class Ball {
@@ -99,6 +116,9 @@ class Paddle {
 }
 
 class Brick {
+	public	bricks: {x: number, y: number, status: number};
+	private brickX: number;
+	private brickY: number;
 	constructor(
 		private readonly rowCount: number,
 		private readonly columnCount: number,
@@ -108,7 +128,21 @@ class Brick {
 		private readonly offsetTop: number,
 		private readonly offsetLeft: number,
 	) {}
-	
+	public initData(b :Ball) {
+		for (let c = 0; c < this.getColumnCount(); c++) {
+			this.bricks[c] = [];
+			for (let r = 0; r < this.getRowCount(); r++) {
+				this.bricks[c][r] = { x : 0, y : 0, status: 1};
+			}
+		}
+	}
+
+	public getBrickX(): number {
+		return this.brickX;
+	}
+	public getBrickY(): number {
+		return this.brickY;
+	}
 	public getRowCount(): number {
 		return this.rowCount;
 	}
