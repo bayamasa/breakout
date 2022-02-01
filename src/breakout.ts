@@ -118,7 +118,7 @@ class Brick {
 		private readonly y: number,
 		private readonly status: number,
 		private readonly height: number,
-		private readonly width: number,7cb
+		private readonly width: number,
 	) {
 		
 	}
