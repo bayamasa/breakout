@@ -53,17 +53,16 @@ class Breakout {
 		this.ctx.fill();
 		this.ctx.closePath();
 	}
-	public drawBricks(b: Bricks) {
-		for(let c = 0; c < b.getColumnCount(); c++) {
-			for(var r = 0; r < b.getRowCount(); r++) {
-				if (b.bricks[c][r].status == 1)
+	public drawBricks(bs: Bricks) {
+		for(var r = 0; r < bs.getRowCount(); r++) {
+			for(let c = 0; c < bs.getColumnCount(); c++) {
+				let b = bs.getBrick(r, c);
+				if (b.getIsBroken() == false)
 				{
-					b.setBrickX((c * (b.getWidth() + b.getPadding())) + b.getOffsetLeft());
-					b.setBrickY((r * (b.getHeight() + b.getPadding())) + b.getOffsetTop());
-					b.bricks[c][r].x = b.getBrickX();
-					b.bricks[c][r].y = b.getBrickY();
+					b.setX((c * (b.getWidth() + bs.getPadding())) + bs.getOffsetLeft());
+					b.setY((r * (b.getHeight() + bs.getPadding())) + bs.getOffsetTop());
 					this.ctx.beginPath();
-					this.ctx.rect(b.getBrickX(), b.getBrickX(), b.getWidth(), b.getHeight());
+					this.ctx.rect(b.getX(), b.getY(), b.getWidth(), b.getHeight());
 					this.ctx.fillStyle = "#0095DD";
 					this.ctx.fill();
 					this.ctx.closePath();
@@ -112,62 +111,59 @@ class Paddle {
 }
 
 class Brick {
-	
 	constructor(
-		private readonly x: number,
-		private readonly y: number,
-		private readonly status: number,
+		private x: number,
+		private y: number,
+		private isBroken: boolean,
 		private readonly height: number,
 		private readonly width: number,
-	) {
-		
+	) {}
+	public getX(): number {
+		return this.x;
+	}
+	public getY(): number {
+		return this.y;
+	}
+	public getIsBroken(): boolean {
+		return this.isBroken;
+	}
+	public getHeight(): number {
+		return this.height;
+	}
+	public getWidth(): number {
+		return this.width;
+	}
+	public setX(x :number) {
+		this.x = x;
+	}
+	public setY(y :number) {
+		this.y = y;
 	}
 }
 
 class Bricks{
-	private brickX: number;
-	private brickY: number;
+	public brick: Brick[][]
 	constructor(
 		private readonly rowCount: number,
 		private readonly columnCount: number,
-		private readonly width: number,
-		private readonly height: number,
 		private readonly padding: number,
 		private readonly offsetTop: number,
 		private readonly offsetLeft: number,
 	) {}
-	public initData(b :Ball) {
-		for (let c = 0; c < this.getColumnCount(); c++) {
-			this.bricks[c] = new Array();
-			for (let r = 0; r < this.getRowCount(); r++) {
-				this.bricks[c][r] = {x:0, y:0, status:0};
+	public initData(b :Brick) {
+		this.brick = new Array(this.rowCount)
+		for (let r = 0; r < this.rowCount; r++) {
+			this.brick[r] = new Array(this.columnCount)
+			for (let c = 0; c < this.columnCount; c++) {
+				this.brick[r][c] = b
 			}
 		}
-	}
-
-	public getBrickX(): number {
-		return this.brickX;
-	}
-	public getBrickY(): number {
-		return this.brickY;
-	}
-	public setBrickX(x :number) {
-		this.brickX = x;
-	}
-	public setBrickY(y :number) {
-		this.brickY = y;
 	}
 	public getRowCount(): number {
 		return this.rowCount;
 	}
 	public getColumnCount(): number {
 		return this.columnCount;
-	}
-	public getWidth(): number {
-		return this.width;
-	}
-	public getHeight(): number {
-		return this.height;
 	}
 	public getPadding(): number {
 		return this.padding;
@@ -178,16 +174,20 @@ class Bricks{
 	public getOffsetLeft(): number {
 		return this.offsetLeft;
 	}
+	public getBrick(row :number, column:number): Brick {
+		return (this.brick[row][column]);
+	}
 }
 
 let breakout = new Breakout(0, 3);
 let ball = new Ball(10, 20, 10, 3, -3);
 let paddle = new Paddle(10, 75, (breakout.getCanvasWidth() - 75) / 2, false, false);
-let brick = new Bricks(3, 5, 75, 20, 10, 30, 30)
-brick.initData(ball);
-console.log(brick.bricks[0][0]);
+let br = new Brick(0, 0, false, 20, 75)
+let bricks = new Bricks(3, 5, 10, 30, 30)
+
+bricks.initData(br)
 breakout.drawLives();
 breakout.drawScore();
 breakout.drawPaddle(paddle);
 breakout.drawBall(ball);
-breakout.drawBricks(brick);
+breakout.drawBricks(bricks);
