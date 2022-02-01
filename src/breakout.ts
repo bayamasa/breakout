@@ -1,7 +1,3 @@
-// import { Ball } from "./object";
-
-import { collapseTextChangeRangesAcrossMultipleVersions } from "../node_modules/typescript/lib/typescript";
-
 class Breakout {
 	private readonly canvas: HTMLCanvasElement
 	private readonly ctx: CanvasRenderingContext2D
@@ -57,20 +53,20 @@ class Breakout {
 		this.ctx.fill();
 		this.ctx.closePath();
 	}
-	public drawBricks(b: Brick) {
+	public drawBricks(b: Bricks) {
 		for(let c = 0; c < b.getColumnCount(); c++) {
 			for(var r = 0; r < b.getRowCount(); r++) {
 				if (b.bricks[c][r].status == 1)
 				{
-					b.getBrickX() = (c * (b.getWidth() + b.getPadding())) + b.getOffsetLeft();
-					this.brickY = (r * (this.getHeight() + this.getPadding())) + this.getOffsetTop();
-					this.bricks[c][r].x = this.getBrickX();
-					this.bricks[c][r].y = this.getBrickY();
-					ctx.beginPath();
-					ctx.rect(brickX, brickY, brickWidth, brickHeight);
-					ctx.fillStyle = "#0095DD";
-					ctx.fill();
-					ctx.closePath();
+					b.setBrickX((c * (b.getWidth() + b.getPadding())) + b.getOffsetLeft());
+					b.setBrickY((r * (b.getHeight() + b.getPadding())) + b.getOffsetTop());
+					b.bricks[c][r].x = b.getBrickX();
+					b.bricks[c][r].y = b.getBrickY();
+					this.ctx.beginPath();
+					this.ctx.rect(b.getBrickX(), b.getBrickX(), b.getWidth(), b.getHeight());
+					this.ctx.fillStyle = "#0095DD";
+					this.ctx.fill();
+					this.ctx.closePath();
 				}
 			}
 		}
@@ -116,7 +112,19 @@ class Paddle {
 }
 
 class Brick {
-	public	bricks: {x: number, y: number, status: number};
+	
+	constructor(
+		private readonly x: number,
+		private readonly y: number,
+		private readonly status: number,
+		private readonly height: number,
+		private readonly width: number,7cb
+	) {
+		
+	}
+}
+
+class Bricks{
 	private brickX: number;
 	private brickY: number;
 	constructor(
@@ -130,9 +138,9 @@ class Brick {
 	) {}
 	public initData(b :Ball) {
 		for (let c = 0; c < this.getColumnCount(); c++) {
-			this.bricks[c] = [];
+			this.bricks[c] = new Array();
 			for (let r = 0; r < this.getRowCount(); r++) {
-				this.bricks[c][r] = { x : 0, y : 0, status: 1};
+				this.bricks[c][r] = {x:0, y:0, status:0};
 			}
 		}
 	}
@@ -142,6 +150,12 @@ class Brick {
 	}
 	public getBrickY(): number {
 		return this.brickY;
+	}
+	public setBrickX(x :number) {
+		this.brickX = x;
+	}
+	public setBrickY(y :number) {
+		this.brickY = y;
 	}
 	public getRowCount(): number {
 		return this.rowCount;
@@ -169,9 +183,11 @@ class Brick {
 let breakout = new Breakout(0, 3);
 let ball = new Ball(10, 20, 10, 3, -3);
 let paddle = new Paddle(10, 75, (breakout.getCanvasWidth() - 75) / 2, false, false);
-let brick = new Brick(3, 5, 75, 20, 10, 30, 30);
+let brick = new Bricks(3, 5, 75, 20, 10, 30, 30)
+brick.initData(ball);
+console.log(brick.bricks[0][0]);
 breakout.drawLives();
 breakout.drawScore();
 breakout.drawPaddle(paddle);
 breakout.drawBall(ball);
-
+breakout.drawBricks(brick);
