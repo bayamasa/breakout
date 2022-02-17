@@ -1,9 +1,21 @@
 import type { NextPage } from 'next'
 
-const About: NextPage = () => {
+interface Props {
+	hello?: string;
+}
+
+const About: NextPage<Props> = ({hello}) => {
 	return (
+		<>
 		<div>about</div>
+		<div>{hello}</div>
+		</>
 	)
 }
+
+About.getInitialProps = () => {
+	const hello = "hello"
+	return { hello }
+  }
 
 export default About
